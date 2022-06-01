@@ -1,0 +1,244 @@
+
+<!--<div *ngFor="let customer of customers">
+<div>{{customer.name}}</div>
+</div>
+<div >
+<button >Add new customer</button>
+</div>-->
+
+<div style="width: 100%;text-align: right; padding: 0px 50px;">
+  <input type="seach" (ngModelChange)="searchCustomers(key.value)" #key="ngModel" ngModel
+  name="key" id="searchName" placeholder="Search customers.."/>
+</div>
+
+
+<div class="modal-body" style="width: 100%;text-align: center;">
+<!-- Button trigger modal -->
+<button (click)="onOpenModal1('add')" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  Add new customer
+</button>
+</div>
+
+<div id="addCustomerModal" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add customer</h5>
+        <button (click)="onCloseModal()" id="addCustomerModalClose" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Enter customer details.</p>
+        <form #addForm="ngForm" (ngSubmit)="onAddCustomer(addForm)">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" ngModel name="name"
+            class="form-control" id="new_customer_name" placeholder="Name" required>
+          </div>
+          <div class="form-group">
+            <label for="surname">Surname</label>
+            <input type="text" ngModel name="surname"
+            class="form-control" id="new_customer_surname" placeholder="Surname" required>
+          </div>
+          <div class="form-group">
+            <label for="birthDate">Birth Date</label>
+            <input type="date" ngModel name="birthDate"
+            class="form-control" id="new_customer_birthDate" placeholder="2010-12-12" required>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" ngModel name="phone"
+            class="form-control" id="new_customer_phone" placeholder="" >
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" ngModel name="email"
+            class="form-control" id="new_customer_email" placeholder="" >
+          </div>
+          <div class="modal-footer">
+            <button type="button" (click)="onCloseModal()" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="container" id="main-container">
+  <div class="row">
+      <div *ngFor="let customer of customers" class="col-lg-4">
+          <div class="card card-margin">
+              <div class="card-header no-border">
+                  <h5 class="card-title">{{customer?.name}}</h5>
+              </div>
+              <div class="card-body pt-0">
+                  <div class="widget-49">
+                      <div class="widget-49-title-wrapper">
+                          <div class="widget-49-date-primary">
+                              <span class="widget-49-date-day">{{customer?.firstLetters}}</span>
+                     
+                          </div>
+                          <div class="widget-49-meeting-info">
+                              <span class="widget-49-pro-title">{{customer?.name}} {{customer?.surname}}</span>
+                              <span class="widget-49-meeting-time">{{customer?.phone}} | {{customer?.email}}</span>
+                          </div>
+                      </div>
+                      <ol class="widget-49-meeting-points">
+                          <li class="widget-49-meeting-item"><span>{{customer?.email}}</span></li>
+                          <li class="widget-49-meeting-item"><span>Phone {{customer?.phone}}</span></li>
+                          <li class="widget-49-meeting-item"><span>Date Of Birth {{customer?.birthDayString}}</span></li>
+                      </ol>
+                      <div class="widget-49-meeting-action">
+                          <a (click)="onOpenModalForUpdate(customer,'edit')" href="#" class="btn btn-sm btn-flash-border-primary"  >EDIT</a>
+                          <a (click)="onOpenModalForDelete(customer)" href="#" class="btn btn-sm btn-flash-border-primary" >delete</a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="updateCustomerModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Update customer</h5>
+              <button (click)="onCloseModalForUpdate()" id="addCustomerModalClose" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Edit customer details.</p>
+              <form #editForm="ngForm" >
+                <input type="hidden" ngModel="{{editCustomer?.id}}" name="id" class="form-control" id="customer_id_edit" />
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input type="text" ngModel="{{editCustomer?.name}}" name="name"
+                  class="form-control" id="customer_name_edit" placeholder="Name" required>
+                </div>
+                <div class="form-group">
+                  <label for="surname">Surname</label>
+                  <input type="text" ngModel="{{editCustomer?.surname}}" name="surname"
+                  class="form-control" id="customer_surname_edit" placeholder="Surname" required>
+                </div>
+                <div class="form-group">
+                  <label for="birthDate">Birth Date</label>
+                  <input type="date" ngModel name="birthDate"
+                  class="form-control" id="customer_birthDate_edit" placeholder="2010-12-12" required>
+                </div>
+                <div class="form-group">
+                  <label for="phone">Phone</label>
+                  <input type="text" ngModel="{{editCustomer?.phone}}" name="phone"
+                  class="form-control" id="customer_phone_edit" placeholder="" >
+                </div>
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input type="text" ngModel="{{editCustomer?.email}}" name="email"
+                  class="form-control" id="customer_email_edit" placeholder="" >
+                </div>
+                <div class="modal-footer">
+                  <button type="button" (click)="onCloseModalForUpdate()" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit"  (click)="onUpdateCustomer(editForm.value)" class="btn btn-primary">Save changes</button>
+                </div>
+              </form>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+      <div id="deleteCustomerModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Delete customer</h5>
+              <button (click)="onCloseModalForDelete()" id="addCustomerModalClose" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Do you want delete customer {{deleteCustomer?.name}}?</p>
+              <form #deleteForm="ngForm" >
+                <input type="hidden" ngModel="{{deleteCustomer?.id}}" name="id" class="form-control" id="customer_id_edit" />
+                <div class="modal-footer">
+                  <button type="button" (click)="onCloseModalForDelete()" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="submit"  (click)="onDeleteCustomer(editForm.value)" class="btn btn-primary">Delete</button>
+                </div>
+              </form>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+
+      <!--<div class="col-lg-4">
+          <div class="card card-margin">
+              <div class="card-header no-border">
+                  <h5 class="card-title">MOM</h5>
+              </div>
+              <div class="card-body pt-0">
+                  <div class="widget-49">
+                      <div class="widget-49-title-wrapper">
+                          <div class="widget-49-date-warning">
+                              <span class="widget-49-date-day">13</span>
+                              <span class="widget-49-date-month">apr</span>
+                          </div>
+                          <div class="widget-49-meeting-info">
+                              <span class="widget-49-pro-title">PRO-08235 Lexa Corp.</span>
+                              <span class="widget-49-meeting-time">12:00 to 13.30 Hrs</span>
+                          </div>
+                      </div>
+                      <ol class="widget-49-meeting-points">
+                          <li class="widget-49-meeting-item"><span>Scheming module is removed</span></li>
+                          <li class="widget-49-meeting-item"><span>App design contract confirmed</span></li>
+                          <li class="widget-49-meeting-item"><span>Client request to send invoice</span></li>
+                      </ol>
+                      <div class="widget-49-meeting-action">
+                          <a href="#" class="btn btn-sm btn-flash-border-warning">View All</a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="col-lg-4">
+          <div class="card card-margin">
+              <div class="card-header no-border">
+                  <h5 class="card-title">MOM</h5>
+              </div>
+              <div class="card-body pt-0">
+                  <div class="widget-49">
+                      <div class="widget-49-title-wrapper">
+                          <div class="widget-49-date-success">
+                              <span class="widget-49-date-day">22</span>
+                              <span class="widget-49-date-month">apr</span>
+                          </div>
+                          <div class="widget-49-meeting-info">
+                              <span class="widget-49-pro-title">PRO-027865 Opera module</span>
+                              <span class="widget-49-meeting-time">12:00 to 13.30 Hrs</span>
+                          </div>
+                      </div>
+                      <ol class="widget-49-meeting-points">
+                          <li class="widget-49-meeting-item"><span>Scope is revised and updated</span></li>
+                          <li class="widget-49-meeting-item"><span>Time-line has been changed</span></li>
+                          <li class="widget-49-meeting-item"><span>Received approval to start wire-frame</span></li>
+                      </ol>
+                      <div class="widget-49-meeting-action">
+                          <a href="#" class="btn btn-sm btn-flash-border-success">View All</a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>-->
+  </div>
+  
+  <div *ngif="customers?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+    <div class="alert alert-info">
+      <h4 class="alert-heading">NO CUSTOMERS!</h4>
+      <p>No Customers were found.</p>
+    </div>
+  </div>
